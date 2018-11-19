@@ -96,6 +96,7 @@ func List(client *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.Pa
 
 	resp, err := http.Get(url)
 	if (err == nil) && (resp.StatusCode == 404) {
+		fmt.Printf("Error 404 accessing url %s", url)
 		serviceGone = fmt.Errorf("404 Error: [%s]", url)
 	}
 
