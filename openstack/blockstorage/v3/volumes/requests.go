@@ -169,7 +169,7 @@ func List(client *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.Pa
 		query, err := opts.ToVolumeListQuery()
 		if err != nil {
 			if serviceGone != nil {
-				return pagination.Pager{Err: errors.Wrapf(err, "Actually, it was: %v", serviceGone)}
+				return pagination.Pager{Err: serviceGone}
 			}
 			return pagination.Pager{Err: err}
 		}
