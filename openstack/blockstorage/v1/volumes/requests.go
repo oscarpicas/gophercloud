@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/pagination"
+	"github.com/pkg/errors"
+	"net/http"
 )
 
 // CreateOptsBuilder allows extensions to add additional parameters to the
@@ -90,10 +92,21 @@ func (opts ListOpts) ToVolumeListQuery() (string, error) {
 func List(client *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.Pager {
 	fmt.Println("Using storage V1")
 	url := listURL(client)
+
+	var serviceGone error = nil
+
+	resp, err := http.Get(url)
+	if (err == nil) && (resp.StatusCode == 404) {
+		serviceGone = fmt.Errorf("404 Error: [%s]", url)
+	}
+
 	fmt.Printf("Accessing url %s", url)
 	if opts != nil {
 		query, err := opts.ToVolumeListQuery()
 		if err != nil {
+			if serviceGone != nil {
+				return pagination.Pager{Err: errors.Wrapf(err, "Actually, it was: %v", serviceGone)}
+			}
 			return pagination.Pager{Err: err}
 		}
 		url += query
