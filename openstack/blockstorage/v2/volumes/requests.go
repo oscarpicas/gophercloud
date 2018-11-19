@@ -1,6 +1,7 @@
 package volumes
 
 import (
+	"fmt"
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/pagination"
 )
@@ -149,6 +150,7 @@ func (opts ListOpts) ToVolumeListQuery() (string, error) {
 
 // List returns Volumes optionally limited by the conditions provided in ListOpts.
 func List(client *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.Pager {
+	fmt.Println("Using storage V2")
 	url := listURL(client)
 	if opts != nil {
 		query, err := opts.ToVolumeListQuery()
