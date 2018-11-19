@@ -152,6 +152,7 @@ func (opts ListOpts) ToVolumeListQuery() (string, error) {
 func List(client *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.Pager {
 	fmt.Println("Using storage V2")
 	url := listURL(client)
+	fmt.Printf("Accessing url %s", url)
 	if opts != nil {
 		query, err := opts.ToVolumeListQuery()
 		if err != nil {
